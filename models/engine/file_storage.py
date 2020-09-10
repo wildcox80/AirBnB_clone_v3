@@ -29,7 +29,7 @@ class FileStorage:
         if cls is not None:
             new_dict = {}
             for key, value in self.__objects.items():
-                if cls == value.__class__ or cls == value.__class__.__name__:
+                if cls.__name__ == value.__class__.__name__:
                     new_dict[key] = value
             return new_dict
         return self.__objects
@@ -55,7 +55,7 @@ class FileStorage:
                 jo = json.load(f)
             for key in jo:
                 self.__objects[key] = classes[jo[key]["__class__"]](**jo[key])
-        except(exception):
+        except FileNotFoundError:
             pass
 
     def delete(self, obj=None):
@@ -70,19 +70,26 @@ class FileStorage:
         self.reload()
 
     def get(self, cls, id):
-        """new methot"""
-        if cls is not None and id is not None:
-            clas = "{}.{}".format(cls.__name__, id)
-            if clas in self.__objects.keys():
-                return self.__objects[clas]
-            else:
-                return None
-        else:
-            return None
+        """get name class
+        Args:
+            id (int): id type uuid
+            cls (Class): type class var
+        Returns:
+            [instance]: if not fount return str
+        """
+        for obj in self.all(cls).values():
+            if obj.id == id:
+                return obj
+        return None
 
     def count(self, cls=None):
-        """cont objet"""
-        if cls is not None:
-            return len(self.__objects[cls])
+        """count object
+        Args:
+            cls (Class): type class var default None
+        Returns:
+            [int]: count of instances in objects
+        """
+        if cls is None:
+            return len(self.all())
         else:
-            return len(self.__objects)
+            return len(self.all(cls))
