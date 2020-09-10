@@ -16,9 +16,11 @@ def http_action():
             dic.append(BaseModel.to_dict(value))
         return flask.jsonify(dic)
 
-@app_views.route('/states/<state_id>', methods=['GET', 'DELETE'], strict_slashes=False) 
+
+@app_views.route('/states/<state_id>',
+                 methods=['GET', 'DELETE'], strict_slashes=False)
 def http_actions(state_id):
-    dic = storage.get(State, state_id) 
+    dic = storage.get(State, state_id)
     if request.method == "GET":
         if dic is not None:
             return flask.jsonify(BaseModel.to_dict(dic))
@@ -26,6 +28,3 @@ def http_actions(state_id):
             raise abort(404)
     elif request.method == "DELETE":
         return "A POST has been received!"
-        
-
-            
