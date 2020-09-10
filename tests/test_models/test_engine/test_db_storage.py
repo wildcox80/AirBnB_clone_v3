@@ -89,9 +89,9 @@ class TestFileStorage(unittest.TestCase):
 
 
 class TestDBStorage(unittest.TestCase):
-    """Test the DBStorage class"""    
+    """Test the DBStorage class"""
     @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') != 'db',
-    "not testing db storage")
+                     'not testing db storage')
     def test_get(self):
         """Test that get method"""
         new_state = State(name="New York")
